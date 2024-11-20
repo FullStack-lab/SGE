@@ -107,6 +107,14 @@ const Produto = () => {
               setNewProduto({ ...newProduto, EstoqueMinimo: e.target.value })
             }
           />
+          <input
+            type="number"
+            placeholder="ID Categoria"
+            value={newProduto.CategoriaId}
+            onChange={(e) =>
+              setNewProduto({ ...newProduto, CategoriaId: e.target.value })
+            }
+          />
           <button type="submit">Adicionar Produto</button>
         </form>
         <ul>
