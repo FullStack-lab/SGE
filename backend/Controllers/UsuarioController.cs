@@ -28,5 +28,19 @@ namespace backend.Controllers
             var createdUsuario = await _usuarioService.CreateAsync(usuario);
             return CreatedAtAction(nameof(GetAllUsuarios), new { id = createdUsuario.Id }, createdUsuario);
         }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] Usuario loginUsuario)
+        {
+            var usuario = await _usuarioService.GetByEmailAsync(loginUsuario.Email);
+
+            if (usuario == null || usuario.SenhaHash != loginUsuario.SenhaHash)
+            {
+                return Unauthorized(new { Message = "Credenciais inválidas!" });
+            }
+
+            return Ok(usuario);
+        }
+
     }
 }

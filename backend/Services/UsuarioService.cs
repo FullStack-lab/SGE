@@ -24,5 +24,11 @@ namespace backend.Services
             await _context.SaveChangesAsync();
             return usuario;
         }
+
+        public async Task<Usuario?> GetByEmailAsync(string email)
+        {
+            return await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
+        }
+
     }
 }

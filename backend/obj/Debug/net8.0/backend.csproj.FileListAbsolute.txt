@@ -269,3 +269,4 @@ C:\Users\ledaz\OneDrive\Área de Trabalho\exercicios 3 semestre\SGE\backend\obj\
 C:\Users\ledaz\OneDrive\Área de Trabalho\exercicios 3 semestre\SGE\backend\obj\Debug\net8.0\backend.pdb
 C:\Users\ledaz\OneDrive\Área de Trabalho\exercicios 3 semestre\SGE\backend\obj\Debug\net8.0\backend.genruntimeconfig.cache
 C:\Users\ledaz\OneDrive\Área de Trabalho\exercicios 3 semestre\SGE\backend\obj\Debug\net8.0\ref\backend.dll
+C:\Users\Fernando Zuchi\Desktop\SGE\backend\bin\Debug\net8.0\package-lock.json

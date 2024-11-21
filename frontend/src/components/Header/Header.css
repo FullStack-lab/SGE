@@ -1,4 +1,4 @@
-header {
+.headerContainer {
   max-width: 74rem;
   height: calc(100vh - 10rem);
   margin: 5rem auto;
@@ -30,9 +30,8 @@ header {
 .navButtons {
   display: flex;
   justify-content: flex-start;
-  margin-top: 2rem;
-  margin-bottom: -5rem;
-  margin-left: 2.70rem;
+  margin-top: -6rem;
+  margin-left: -2.40rem;
 }
 
 .navButtons .navlink:active {

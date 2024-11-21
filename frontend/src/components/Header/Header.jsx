@@ -4,7 +4,7 @@ import "./Header.css";
 
 export function Header({children}) {
   return (
-    <>
+    <div className="headerContainer">
       <div className="navButtons">
         <NavLink to="/" title="Timer" className="navlink">
           <Timer size={24} className="icon"/>
@@ -24,12 +24,12 @@ export function Header({children}) {
         </NavLink>
         <NavLink to="/usuarios" title="Histórico" className="navlink">
           <Scroll size={24} className="icon"/>
-          Usuários
+          Perfil
         </NavLink>
       </div>
       <header>
         {children}
       </header>
-    </>
+    </div>
   );
 }
