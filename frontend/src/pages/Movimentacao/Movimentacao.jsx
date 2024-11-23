@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { getAllMovimentacoes, createMovimentacao } from "../services/movimentacaoService";
-import { getAllProdutos, updateProduto } from "../services/produtoService";
-import { Navbar } from "../components/Navbar/Navbar";
-import { Header } from "../components/Header/Header";
+import { getAllMovimentacoes, createMovimentacao } from "../../services/movimentacaoService";
+import { getAllProdutos, updateProduto } from "../../services/produtoService";
+import { Navbar } from "../../components/Navbar/Navbar";
+import { Header } from "../../components/Header/Header";
 import { Container, TextField, Button, MenuItem, Select, InputLabel, FormControl, Box, Typography, Modal, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import HistoryIcon from '@mui/icons-material/History';
+import './Movimentacao.css'; 
+
+
 
 const Movimentacao = () => {
   const [movimentacoes, setMovimentacoes] = useState([]);
@@ -127,12 +130,12 @@ const Movimentacao = () => {
                 <MenuItem value="saida">Saída</MenuItem>
               </Select>
             </FormControl>
-            <Button startIcon={<AddIcon/>} type="submit" variant="contained" color="primary">
+            <Button startIcon={<AddIcon />} type="submit" variant="contained" color="primary">
               Adicionar Movimentação
             </Button>
           </Box>
           <Box sx={{ mt: 4 }}>
-            <Button startIcon={<HistoryIcon/>} onClick={() => setModalOpen(true)} variant="contained" color="primary" sx={{ mt: 2 }}>
+            <Button startIcon={<HistoryIcon />} onClick={() => setModalOpen(true)} variant="contained" color="primary" sx={{ mt: 2 }}>
               Ver Movimentações
             </Button>
           </Box>
@@ -160,28 +163,46 @@ const Movimentacao = () => {
             }}
             sx={{ mt: 2, mb: 2 }}
           />
-          <TableContainer component={Paper}>
-            <Table>
+          <TableContainer component={Paper} className="custom-table-container">
+            <Table className="custom-table">
               <TableHead>
                 <TableRow>
-                  <TableCell>ID do Produto</TableCell>
-                  <TableCell>Quantidade</TableCell>
-                  <TableCell>Tipo</TableCell>
-                  <TableCell>Data</TableCell>
+                  <TableCell className="table-header">##</TableCell>
+                  <TableCell className="table-header">Tipo</TableCell>
+                  <TableCell className="table-header">Quantidade</TableCell>
+                  <TableCell className="table-header">Data</TableCell>
+                  <TableCell className="table-header">Hora</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {filteredMovimentacoes.map((movimentacao) => (
-                  <TableRow key={movimentacao.id}>
-                    <TableCell>{movimentacao.produtoId}</TableCell>
-                    <TableCell>{movimentacao.quantidade}</TableCell>
-                    <TableCell>{movimentacao.tipo}</TableCell>
-                    <TableCell>{movimentacao.data}</TableCell>
-                  </TableRow>
-                ))}
+                {filteredMovimentacoes.map((movimentacao) => {
+                  const data = new Date(movimentacao.data);
+                  const dataFormatada = data.toLocaleDateString("pt-BR");
+                  const horaFormatada = data.toLocaleTimeString("pt-BR", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  });
+
+                  return (
+                    <TableRow key={movimentacao.id} className="table-row">
+                      <TableCell>
+                        <strong>{movimentacao.produtoId}</strong>
+                      </TableCell>
+                      <TableCell
+                        className={`tipo-cell ${movimentacao.tipo === "saida" ? "saida" : "entrada"}`}
+                      >
+                        {movimentacao.tipo}
+                      </TableCell>
+                      <TableCell>{movimentacao.quantidade}</TableCell>
+                      <TableCell>{dataFormatada}</TableCell>
+                      <TableCell>{horaFormatada}</TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </TableContainer>
+
         </Box>
       </Modal>
     </>

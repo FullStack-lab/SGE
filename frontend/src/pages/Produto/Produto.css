@@ -1,0 +1,89 @@
+/* Estilo da tabela */
+.custom-table-container {
+    margin: 0 auto; /* Centraliza a tabela */
+    border-radius: 8px;
+    overflow: hidden;
+    width: 90%; /* Limita a largura da tabela */
+  }
+  
+  .custom-table {
+    width: 100%; /* Usa 100% da largura do container */
+    border-collapse: collapse;
+  }
+  
+  /* Botões de ação */
+  .btn-del,
+  .btn-edit {
+    width: 80px;
+    height: 40px;
+    border-radius: 9px;
+    font-size: 14px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
+    color: white;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-del {
+    background-color: rgb(255, 0, 0);
+  }
+  
+  .btn-edit {
+    background-color: rgba(0, 38, 255, 0.742);
+  }
+  
+  .btn-del:hover {
+    background-color: rgb(220, 0, 0);
+  }
+  
+  .btn-edit:hover {
+    background-color: rgba(0, 38, 255, 0.9);
+  }
+  
+  /* Estilo da tabela */
+  .table-header {
+    background-color: #343a40bb;
+    color: rgb(0, 0, 0);
+    padding: 12px;
+    font-weight: bold;
+    text-transform: uppercase; /* Deixa o texto em letras maiúsculas */
+    text-align: center;
+  }
+  
+  /* Linhas da tabela */
+  .table-row:nth-child(even) {
+    background-color: #f9f9f9; /* Linhas alternadas (striped) */
+  }
+  
+  .table-row:hover {
+    background-color: #f1f1f1; /* Efeito hover nas linhas */
+  }
+  
+  .table-row td {
+    padding: 12px;
+    text-align: center;
+  }
+  
+  /* Estilo para a célula "Tipo" */
+  .tipo-cell {
+    font-weight: bold;
+    color: black;
+  }
+  
+  .tipo-cell.entrada {
+    background-color: rgba(0, 255, 0, 0.427); /* Verde para entrada */
+  }
+  
+  .tipo-cell.saida {
+    background-color: rgba(255, 0, 0, 0.348); /* Vermelho para saída */
+  }
+  
+  /* Estilo para as células de ID e quantidade */
+  .table-cell-strong {
+    font-weight: bold;
+  }
+  

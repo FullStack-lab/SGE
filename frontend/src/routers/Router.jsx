@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import Produto from '../pages/Produto';
-import Categoria from '../pages/Categoria';
-import Movimentacao from '../pages/Movimentacao';
-import Usuario from '../pages/Usuario';
-import Home from '../pages/Home';
-import SignIn from '../pages/SigIn';
+import Produto from '../pages/Produto/Produto';
+import Categoria from '../pages/Categoria/Categoria';
+import Movimentacao from '../pages/Movimentacao/Movimentacao';
+import Usuario from '../pages/Usuario/Usuario';
+import Home from '../pages/Home/Home';
+import SignIn from "../pages/Sigln/SigIn"; // Corrigido para o caminho correto
 import { ProtectedRoute } from '../components/ProtectedRoute';
 
 const AppRouter = () => {

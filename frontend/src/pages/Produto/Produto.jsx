@@ -1,15 +1,16 @@
 import React, { useEffect, useState, useContext } from "react";
-import { getAllCategorias } from "../services/categoriaService";
-import { getAllProdutos, createProduto, deleteProduto, updateProduto } from "../services/produtoService";
-import { Navbar } from "../components/Navbar/Navbar";
-import { Header } from "../components/Header/Header";
-import { AuthContext } from "../contexts/AuthContext";
+import { getAllCategorias } from "../../services/categoriaService";
+import { getAllProdutos, createProduto, deleteProduto, updateProduto } from "../../services/produtoService";
+import { Navbar } from "../../components/Navbar/Navbar";
+import { Header } from "../../components/Header/Header";
+import { AuthContext } from "../../contexts/AuthContext";
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import UpdateIcon from '@mui/icons-material/Update';
 import { Container, TextField, Button, MenuItem, Select, InputLabel, FormControl, Box, Typography, Modal, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, styled } from '@mui/material';
+import './Produto.css'
 
 const Produto = () => {
   const { isGerente } = useContext(AuthContext);
@@ -157,7 +158,7 @@ const Produto = () => {
       <Header>
         <Container maxWidth="md">
           <Typography variant="h4" component="h1" gutterBottom>
-            Adicionar Produto {<Button startIcon={<SearchIcon />} style={{marginBottom:'12px' , marginLeft:'200px'}} onClick={() => setModalOpen(true)} variant="contained" color="primary" sx={{ mt: 2 }}>
+            Adicionar Produto {<Button startIcon={<SearchIcon />} style={{ marginBottom: '12px', marginLeft: '200px' }} onClick={() => setModalOpen(true)} variant="contained" color="primary" sx={{ mt: 2 }}>
               Buscar Produtos
             </Button>}
           </Typography>
@@ -247,7 +248,7 @@ const Produto = () => {
                 ))}
               </Select>
             </FormControl>
-            <Button startIcon={<AddIcon/>} type="submit" variant="contained" color="primary">
+            <Button startIcon={<AddIcon />} type="submit" variant="contained" color="primary">
               Adicionar Produto
             </Button>
           </Box>
@@ -261,7 +262,7 @@ const Produto = () => {
         aria-describedby="modal-description"
       >
         <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '80%', maxHeight: '80vh', overflowY: 'auto', bgcolor: '#f5f5f5', boxShadow: 24, p: 4, borderRadius: 2 }}>
-          <Typography id="modal-title" variant="h6" component="h2">
+          <Typography id="modal-title" variant="h4" component="h2">
             Lista de Produtos
           </Typography>
           <TextField
@@ -275,39 +276,52 @@ const Produto = () => {
             }}
             sx={{ mt: 2, mb: 2 }}
           />
-          <TableContainer component={Paper}>
-            <Table>
+          <TableContainer component={Paper} className="custom-table-container">
+            <Table className="custom-table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Código</TableCell>
-                  <TableCell>Nome</TableCell>
-                  <TableCell>Descrição</TableCell>
-                  <TableCell>Preço</TableCell>
-                  <TableCell>Estoque Atual</TableCell>
-                  <TableCell>Estoque Mínimo</TableCell>
-                  <TableCell>Categoria</TableCell>
-                  <TableCell>Ações</TableCell>
+                  <TableCell className="table-header">Código</TableCell>
+                  <TableCell className="table-header">Nome</TableCell>
+                  <TableCell className="table-header">Descrição</TableCell>
+                  <TableCell className="table-header">Preço</TableCell>
+                  <TableCell className="table-header">Estoque Atual</TableCell>
+                  <TableCell className="table-header">Estoque Mínimo</TableCell>
+                  <TableCell className="table-header">Categoria</TableCell>
+                  <TableCell className="table-header">Ações</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {filteredModalProdutos.map((produto) => (
-                  <TableRow key={produto.id}>
-                    <TableCell>{produto.codigo}</TableCell>
+                  <TableRow key={produto.id} className="table-row">
+                    <TableCell className="table-cell-strong">{produto.codigo}</TableCell>
                     <TableCell>{produto.nome}</TableCell>
                     <TableCell>{produto.descricao}</TableCell>
-                    <TableCell>{produto.preco}</TableCell>
+                    <TableCell>
+                      {produto.preco.toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                      })}
+                    </TableCell>
                     <TableCell>{produto.estoqueAtual}</TableCell>
                     <TableCell>{produto.estoqueMinimo}</TableCell>
                     <TableCell>{produto.categoriaId}</TableCell>
                     <TableCell>
-                      {isGerente && (
-                        <Button startIcon={<DeleteIcon/>} variant="contained" color="secondary" onClick={() => handleDelete(produto.id)} sx={{ mr: 2 }}>
-                          Deletar
-                        </Button>
-                      )}
-                      <Button startIcon={<EditIcon/>} variant="contained" color="primary" onClick={() => handleEdit(produto)}>
-                        Editar
-                      </Button>
+                      <div className="d-flex align-items-center gap-2">
+                        {isGerente && (
+                          <button
+                            className="btn-del"
+                            onClick={() => handleDelete(produto.id)}
+                          >
+                            <i className="bi bi-trash3-fill"></i> Deletar
+                          </button>
+                        )}
+                        <button
+                          className="btn-edit"
+                          onClick={() => handleEdit(produto)}
+                        >
+                          <i className="bi bi-pencil-fill"></i> Editar
+                        </button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -424,7 +438,7 @@ const Produto = () => {
                   ))}
                 </Select>
               </FormControl>
-              <Button startIcon={<UpdateIcon/>} type="submit" variant="contained" color="primary">
+              <Button startIcon={<UpdateIcon />} type="submit" variant="contained" color="primary">
                 Atualizar Produto
               </Button>
             </Box>

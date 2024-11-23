@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { getAllCategorias, createCategoria } from '../services/categoriaService';
-import { getAllProdutos } from '../services/produtoService';
-import { Navbar } from "../components/Navbar/Navbar";
-import { Header } from "../components/Header/Header";
+import { getAllCategorias, createCategoria } from '../../services/categoriaService';
+import { getAllProdutos } from '../../services/produtoService';
+import { Navbar } from "../../components/Navbar/Navbar";
+import { Header } from "../../components/Header/Header";
 import { Container, TextField, Button, Box, Typography, List, ListItem, ListItemText, Popover, Modal } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import ListIcon from '@mui/icons-material/List';
@@ -37,15 +37,27 @@ const Categoria = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    // Verificar se a categoria já existe
+    const categoriaExistente = categorias.some(
+      (categoria) => categoria.nome.toLowerCase() === newCategoria.Nome.toLowerCase()
+    );
+  
+    if (categoriaExistente) {
+      alert("Categoria já existe!");
+      return; // Interromper a execução
+    }
+  
     try {
       await createCategoria(newCategoria);
-      fetchCategorias();
+      fetchCategorias(); // Atualizar a lista de categorias
       setNewCategoria({ Nome: '' });
       alert("Categoria adicionada com sucesso!");
     } catch (error) {
       console.error("Erro ao adicionar categoria", error);
     }
   };
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;

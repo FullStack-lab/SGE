@@ -1,14 +1,16 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { getAllUsuarios, createUsuario, deleteUsuario, updateUsuario } from '../services/usuarioService';
-import { Navbar } from "../components/Navbar/Navbar";
-import { Header } from "../components/Header/Header";
-import { AuthContext } from "../contexts/AuthContext";
+import { getAllUsuarios, createUsuario, deleteUsuario, updateUsuario } from '../../services/usuarioService';
+import { Navbar } from "../../components/Navbar/Navbar";
+import { Header } from "../../components/Header/Header";
+import { AuthContext } from "../../contexts/AuthContext";
 import { Container, TextField, Button, MenuItem, Select, InputLabel, FormControl, Box, Typography, Modal, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import UpdateIcon from '@mui/icons-material/Update';
+import './Usuario.css'
+
 
 const Usuario = () => {
   const { isGerente } = useContext(AuthContext);
@@ -158,7 +160,7 @@ const Usuario = () => {
                 <MenuItem value="gerente">Gerente</MenuItem>
               </Select>
             </FormControl>
-            <Button  startIcon={<AddIcon/>} type="submit" variant="contained" color="primary">
+            <Button startIcon={<AddIcon />} type="submit" variant="contained" color="primary">
               Adicionar Usuário
             </Button>
           </Box>
@@ -177,7 +179,7 @@ const Usuario = () => {
         aria-describedby="modal-description"
       >
         <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '80%', maxHeight: '80vh', overflowY: 'auto', bgcolor: '#f5f5f5', boxShadow: 24, p: 4, borderRadius: 2 }}>
-          <Typography id="modal-title" variant="h6" component="h2">
+          <Typography id="modal-title" variant="h4" component="h2">
             Lista de Usuários
           </Typography>
           <TextField
@@ -191,37 +193,49 @@ const Usuario = () => {
             }}
             sx={{ mt: 2, mb: 2 }}
           />
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Nome</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Role</TableCell>
-                  <TableCell>Ações</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {filteredModalUsuarios.map((usuario) => (
-                  <TableRow key={usuario.id}>
-                    <TableCell>{usuario.nome}</TableCell>
-                    <TableCell>{usuario.email}</TableCell>
-                    <TableCell>{usuario.role}</TableCell>
-                    <TableCell>
-                      {isGerente && (
-                        <Button startIcon={<DeleteIcon/>} variant="contained" color="secondary" onClick={() => handleDelete(usuario.id)} sx={{ mr: 2 }}>
-                          Deletar
-                        </Button>
-                      )}
-                      <Button startIcon={<EditIcon/>} variant="contained" color="primary" onClick={() => handleEdit(usuario)}>
-                        Editar
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+          <TableContainer component={Paper} sx={{ mt: 4 }} className="custom-table-container">
+            <div className="table-responsive">
+              <table className="custom-table">
+                <thead className="table-header">
+                  <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th width="200px">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredModalUsuarios.map((usuario) => (
+                    <tr key={usuario.id} className="table-row">
+                      <td>{usuario.nome}</td>
+                      <td>{usuario.email}</td>
+                      <td>{usuario.role}</td>
+                      <td>
+                        <div className="d-flex align-items-center gap-2">
+                          {isGerente && (
+                            <button
+                              className="btn-del"
+                              onClick={() => handleDelete(usuario.id)}
+                            >
+                              <i className="bi bi-trash3-fill"></i> Deletar
+                            </button>
+                          )}
+                          <button
+                            className="btn-edit"
+                            onClick={() => handleEdit(usuario)}
+                          >
+                            <i className="bi bi-pencil-fill"></i> Editar
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </TableContainer>
+
+
         </Box>
       </Modal>
 
@@ -284,7 +298,7 @@ const Usuario = () => {
                   <MenuItem value="gerente">Gerente</MenuItem>
                 </Select>
               </FormControl>
-              <Button startIcon={<UpdateIcon/>} type="submit" variant="contained" color="primary">
+              <Button startIcon={<UpdateIcon />} type="submit" variant="contained" color="primary">
                 Atualizar Usuário
               </Button>
             </Box>
