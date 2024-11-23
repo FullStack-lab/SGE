@@ -19,11 +19,13 @@ const AppRouter = () => {
                 <Route path="/" element={<Navigate to="/login" />} />
 
                 {/* Rotas protegidas */}
-                <Route element={<ProtectedRoute />}>
+                <Route element={<ProtectedRoute allowedRoles={["gerente", "funcionario"]} />}>
                     <Route path="/home" element={<Home />} />
                     <Route path="/produtos" element={<Produto />} />
                     <Route path="/categorias" element={<Categoria />} />
                     <Route path="/movimentacoes" element={<Movimentacao />} />
+                </Route>
+                <Route element={<ProtectedRoute allowedRoles={["gerente"]} />}>
                     <Route path="/usuarios" element={<Usuario />} />
                 </Route>
             </Routes>

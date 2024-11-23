@@ -25,10 +25,35 @@ namespace backend.Services
             return usuario;
         }
 
-        public async Task<Usuario?> GetByEmailAsync(string email)
+        public async Task<bool> DeleteAsync(int id)
         {
-            return await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
+            var usuario = await _context.Usuarios.FindAsync(id);
+            if (usuario == null)
+            {
+                return false;
+            }
+
+            _context.Usuarios.Remove(usuario);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
+        public async Task<bool> UpdateAsync(Usuario usuario)
+        {
+            var existingUsuario = await _context.Usuarios.FindAsync(usuario.Id);
+            if (existingUsuario == null)
+            {
+                return false;
+            }
+
+            existingUsuario.Nome = usuario.Nome;
+            existingUsuario.Email = usuario.Email;
+            existingUsuario.SenhaHash = usuario.SenhaHash;
+            existingUsuario.Role = usuario.Role;
+
+            _context.Usuarios.Update(existingUsuario);
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }

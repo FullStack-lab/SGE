@@ -1,137 +1,101 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
+import { TextField, Button, Container, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { Navbar } from "../components/Navbar/Navbar";
-import { Header } from "../components/Header/Header";
-import axios from "axios";
+import { AuthContext } from "../contexts/AuthContext";
+import { getAllUsuarios } from "../services/usuarioService";
+import { Navbar } from "../components/Navbar/Navbar"; 
 
 const SignIn = () => {
-    const [newUsuario, setNewUsuario] = useState({ Nome: "", Email: "", SenhaHash: "", Role: "user" });
-    const [isLogin, setIsLogin] = useState(true);
-    const [userName, setUserName] = useState("");
+    const [login, setLogin] = useState("");
+    const [senha, setSenha] = useState("");
+    const [error, setError] = useState("");
     const navigate = useNavigate();
+    const { login: loginUser } = useContext(AuthContext);
 
-    useEffect(() => {
-        const loggedInUser = sessionStorage.getItem("loggedInUser");
-        if (loggedInUser) {
-            const user = JSON.parse(loggedInUser);
-            setUserName(user.Nome);
-        }
-    }, []);
-
-    const handleSignUp = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setError("");
+
         try {
-            const response = await axios.post("http://localhost:5168/api/Usuario", newUsuario);
-            setNewUsuario({ Nome: "", Email: "", SenhaHash: "", Role: "user" });
-            alert("Usuário cadastrado com sucesso!");
-            setIsLogin(true);
-        } catch (error) {
-            console.error("Erro ao cadastrar usuário:", error);
-            alert("Erro ao cadastrar usuário.");
+            const usuarios = await getAllUsuarios();
+            const listaUsuarios = usuarios.$values;
+
+            if (!listaUsuarios || listaUsuarios.length === 0) {
+                setError("Nenhum usuário encontrado.");
+                return;
+            }
+
+            const usuarioValido = listaUsuarios.find(
+                (user) => user.email === login && user.senhaHash === senha
+            );
+
+            if (usuarioValido) {
+                loginUser(usuarioValido);
+                navigate("/home");
+            } else {
+                setError("Credenciais inválidas.");
+            }
+        } catch (err) {
+            console.error("Erro ao verificar login:", err);
+            setError("Ocorreu um erro ao conectar com o servidor. Tente novamente.");
         }
     };
-
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        console.log("Dados enviados:", {
-            Email: newUsuario.Email,
-            SenhaHash: newUsuario.SenhaHash,
-        });
-    
-        try {
-            const response = await axios.post("http://localhost:5168/api/usuario/login", {
-                Email: newUsuario.Email,
-                SenhaHash: newUsuario.SenhaHash,
-            });
-    
-            console.log("Resposta do servidor:", response.data);
-            const user = response.data;
-    
-            sessionStorage.setItem("loggedIn", true);
-            sessionStorage.setItem("loggedInUser", JSON.stringify(user));
-            setUserName(user.Nome);
-            navigate("/home");
-        } catch (error) {
-            console.error("Erro ao fazer login:", error);
-            alert("Credenciais inválidas!");
-        }
-    };
-    
-    
-
-    const handleLogout = () => {
-        sessionStorage.clear();
-        setUserName("");
-        navigate("/login");
-    };
-
-    const isAuthenticated = !!sessionStorage.getItem("loggedIn");
-
-    if (isAuthenticated) {
-        return (
-            <>
-                <Navbar />
-                <Header>
-                    <h1>Bem-vindo, {userName}!</h1>
-                    <button onClick={handleLogout}>Logout</button>
-                </Header>
-            </>
-        );
-    }
 
     return (
         <>
-            <Navbar />
-            <Header>
-                {isLogin ? (
-                    <>
-                        <h1>Login</h1>
-                        <form onSubmit={handleLogin}>
-                            <input
-                                placeholder="Email"
-                                value={newUsuario.Email}
-                                onChange={(e) => setNewUsuario({ ...newUsuario, Email: e.target.value })}
-                            />
-                            <input
-                                placeholder="Senha"
-                                type="password"
-                                value={newUsuario.SenhaHash}
-                                onChange={(e) => setNewUsuario({ ...newUsuario, SenhaHash: e.target.value })}
-                            />
-                            <button type="submit">Entrar</button>
-                        </form>
-                        <p>
-                            Não tem uma conta? <span onClick={() => setIsLogin(false)}>Cadastre-se</span>
-                        </p>
-                    </>
-                ) : (
-                    <>
-                        <h1>Cadastro</h1>
-                        <form onSubmit={handleSignUp}>
-                            <input
-                                placeholder="Nome"
-                                value={newUsuario.Nome}
-                                onChange={(e) => setNewUsuario({ ...newUsuario, Nome: e.target.value })}
-                            />
-                            <input
-                                placeholder="Email"
-                                value={newUsuario.Email}
-                                onChange={(e) => setNewUsuario({ ...newUsuario, Email: e.target.value })}
-                            />
-                            <input
-                                placeholder="Senha"
-                                type="password"
-                                value={newUsuario.SenhaHash}
-                                onChange={(e) => setNewUsuario({ ...newUsuario, SenhaHash: e.target.value })}
-                            />
-                            <button type="submit">Cadastrar Usuário</button>
-                        </form>
-                        <p>
-                            Já tem uma conta? <span onClick={() => setIsLogin(true)}>Faça login</span>
-                        </p>
-                    </>
+            <Navbar/>
+        <Container maxWidth="xs">
+            <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                minHeight="100vh"
+            >
+                <Typography variant="h4" component="h1" gutterBottom>
+                    Conectar
+                </Typography>
+                {error && (
+                    <Typography variant="body2" color="error" gutterBottom>
+                        {error}
+                    </Typography>
                 )}
-            </Header>
+                <form onSubmit={handleSubmit}>
+                    <TextField
+                        label="Login"
+                        variant="outlined"
+                        margin="normal"
+                        fullWidth
+                        value={login}
+                        onChange={(e) => setLogin(e.target.value)}
+                        InputProps={{
+                            style: { backgroundColor: 'white' },
+                        }}
+                    />
+                    <TextField
+                        label="Senha"
+                        type="password"
+                        variant="outlined"
+                        margin="normal"
+                        fullWidth
+                        value={senha}
+                        onChange={(e) => setSenha(e.target.value)}
+                        InputProps={{
+                            style: { backgroundColor: 'white' },
+                        }}
+                    />
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                        sx={{ mt: 2 }}
+                    >
+                        Entrar
+                    </Button>
+                </form>
+            </Box>
+        </Container>
         </>
     );
 };

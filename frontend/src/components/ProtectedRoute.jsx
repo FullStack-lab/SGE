@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Navigate, Outlet } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
 
-export const ProtectedRoute = () => {
-    const isAuthenticated = !!sessionStorage.getItem("loggedIn"); // Verifica se o usuário está autenticado
+export const ProtectedRoute = ({ allowedRoles }) => {
+    const { user, isGerente } = useContext(AuthContext);
 
-    if (!isAuthenticated) {
-        // Se não estiver autenticado, redireciona para a página de login
+    if (!user) {
         return <Navigate to="/login" />;
     }
 
-    // Se estiver autenticado, renderiza as rotas aninhadas (com Outlet)
+    if (allowedRoles && !allowedRoles.includes(isGerente ? "gerente" : "funcionario")) {
+        return <Navigate to="/home" />;
+    }
+
     return <Outlet />;
 };

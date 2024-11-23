@@ -29,18 +29,35 @@ namespace backend.Controllers
             return CreatedAtAction(nameof(GetAllUsuarios), new { id = createdUsuario.Id }, createdUsuario);
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] Usuario loginUsuario)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUsuario(int id, Usuario usuario)
         {
-            var usuario = await _usuarioService.GetByEmailAsync(loginUsuario.Email);
-
-            if (usuario == null || usuario.SenhaHash != loginUsuario.SenhaHash)
+            if (id != usuario.Id)
             {
-                return Unauthorized(new { Message = "Credenciais inválidas!" });
+                return BadRequest();
             }
 
-            return Ok(usuario);
+            var result = await _usuarioService.UpdateAsync(usuario);
+            if (!result)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUsuario(int id)
+        {
+            var result = await _usuarioService.DeleteAsync(id);
+            if (!result)
+            {
+                return NotFound();
+            }
+            return NoContent();
         }
 
     }
+
+
 }
